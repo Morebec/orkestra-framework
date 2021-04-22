@@ -1,0 +1,74 @@
+{
+    "name": "morebec/orkestra-framework",
+    "description": "Orkestra Framework",
+    "type": "project",
+    "license": "Apache-2.0",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "morebec/orkestra-datetime": "^2.2",
+        "morebec/orkestra-enum": "^2.2",
+        "morebec/orkestra-normalization": "^2.2",
+        "morebec/orkestra-modeling": "^2.2",
+        "morebec/orkestra-messaging": "^2.2",
+        "morebec/orkestra-event-sourcing": "^2.2",
+        "morebec/orkestra-postgresql-eventstore": "^2.2",
+        "morebec/orkestra-postgresql-timer-storage": "^2.2",
+        "morebec/orkestra-retry": "^2.2",
+        "morebec/orkestra-symfony-bundle": "^2.2",
+        "php": ">=7.3",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "symfony/console": "5.2.*",
+        "symfony/dotenv": "5.2.*",
+        "symfony/flex": "^1.3.1",
+        "symfony/framework-bundle": "5.2.*",
+        "symfony/http-client": "5.2.*",
+        "symfony/yaml": "5.2.*",
+        "baldinof/roadrunner-bundle": "^2.0",
+        "monolog/monolog": "^2.0"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Morebec\\Orkestra\\OrkestraFramework\\Framework\\": "src/Framework"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Morebec\\Orkestra\\OrkestraFramework\\Framework\\": "tests/Framework"
+        }
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "5.2.*"
+        }
+    }
+}

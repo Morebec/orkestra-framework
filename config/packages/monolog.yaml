@@ -1,0 +1,33 @@
+monolog:
+  channels:
+    - security
+    - application
+    - message_bus
+
+  handlers:
+    main:
+      type: fingers_crossed
+      level: info
+      handler: file_log
+      channels: [ "!event", "!doctrine" ]
+
+    message_bus:
+      type: 'rotating_file'
+      path: '%kernel.logs_dir%/message_bus.%kernel.environment%.log'
+      level: info
+      max_files: 50 # ~ One month and 20 days
+      channels: [ "message_bus" ]
+
+    file_log:
+      type: 'rotating_file'
+      path: '%kernel.logs_dir%/%kernel.environment%.log'
+      max_files: 50 # ~ One month and 20 days
+      channels: [ "!event", "!doctrine" ]
+      include_stacktraces: true
+
+    syslog_handler:
+      type: 'syslog'
+      level: info
+
+    console:
+      type: console
