@@ -23,12 +23,18 @@ It is essentially an opinionated distribution of the Orkestra components on top 
 - Docker + docker-compose setup
 
 ## Installation
+Clone repository
 ```shell
-git clone morebec/orkestra-framework
+git clone https://github.com/Morebec/orkestra-framework
+```
+
+Install composer dependencies
+```shell
+composer install
 ```
 
 ```shell
-shell bin/quickstart
+bin/console orkestra:quickstart
 ```
 
 ## Docker and docker-compose

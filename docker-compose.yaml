@@ -7,7 +7,7 @@ services:
             target: php_dev
         restart: always
         ports:
-            - 9000:9000
+            - 9090:9090
 
         volumes:
             # Monorepo
@@ -23,33 +23,16 @@ services:
             - PHP_DATE_TIMEZONE=${TIMEZONE:-UTC}
         command: php-fpm
 
-    caddy:
-        container_name: orkestra_framework_caddy
-        image: caddy:2.2.1-alpine
-        restart: always
-        ports:
-            - 80:80
-            - 443:443
-            - 2019:2019
-        volumes:
-            # Monorepo
-            - ./:/srv/app/
-            - ./tls:/srv/tls
-            - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:rw
-            - orkestra_framework_caddy_data:/data
-            - orkestra_framework_caddy_config:/config
     postgresql:
         container_name: orkestra_framework_postgresql
         image: 'docker.io/bitnami/postgresql:11-debian-10'
         ports:
-            - '5432:5432'
+            - 5432:5432
         volumes:
-            - 'postgresql_data:/bitnami/postgresql'
+            - orkestra_postgresql_data:/bitnami/postgresql
         environment:
             - 'ALLOW_EMPTY_PASSWORD=yes'
 
 volumes:
-    orkestra_framework_caddy_data:
-    orkestra_framework_caddy_config:
-    postgresql_data:
+    orkestra_postgresql_data:
         driver: local
