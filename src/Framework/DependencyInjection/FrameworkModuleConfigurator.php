@@ -18,6 +18,7 @@ use Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand\MainEventProcess
 use Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand\MainProjectionEventProcessorConsoleCommand;
 use Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand\MainTimerProcessorConsoleCommand;
 use Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand\OrkestraFrameworkQuickstartConsoleCommand;
+use Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand\StartRoadRunnerConsoleCommand;
 use Morebec\Orkestra\OrkestraFramework\Framework\Projection\PostgreSqlProjectorGroup;
 use Morebec\Orkestra\OrkestraFramework\Framework\Web\DefaultController;
 use Morebec\Orkestra\PostgreSqlDocumentStore\PostgreSqlDocumentStore;
@@ -69,6 +70,8 @@ class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorIn
             $config->controller(DefaultController::class);
         }
 
+        // Road Runner Commands
+        $config->consoleCommand(StartRoadRunnerConsoleCommand::class);
     }
 
     public function configureRoutes(RoutingConfigurator $routes): void

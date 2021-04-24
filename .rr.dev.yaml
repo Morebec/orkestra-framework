@@ -14,19 +14,19 @@ http:
     h2c: false
     max_concurrent_streams: 128
 
+  headers:
+    cors:
+      allowed_origin: "*"
+      allowed_headers: "*"
+  response:
+    X-Powered-By: "RoadRunner"
+
 status:
   address: localhost:2114
 
 logs:
   mode: development
-  channels:
-    http:
-      level: debug # Log all http requests, set to info to disable
-    server:
-      level: info # Everything written to worker stderr is logged
-      mode: raw
-    metrics:
-      level: debug
+  output: stdout
 
 reload:
   enabled: true

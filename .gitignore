@@ -26,3 +26,8 @@
 ###> baldinof/roadrunner-bundle ###
 /bin/rr
 ###< baldinof/roadrunner-bundle ###
+
+###> supervisord
+supervisord.log
+supervisord.pid
+###< supervisord

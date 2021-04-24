@@ -26,7 +26,8 @@
         "symfony/http-client": "5.2.*",
         "symfony/yaml": "5.2.*",
         "baldinof/roadrunner-bundle": "^2.0",
-        "symfony/monolog-bundle": "^3.7"
+        "symfony/monolog-bundle": "^3.7",
+        "symfony/process": "5.2.*"
     },
     "config": {
         "optimize-autoloader": true,

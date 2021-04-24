@@ -19,10 +19,6 @@ services:
             # PHP Ini config
             - ./docker/php-fpm/conf.d:/usr/local/etc/php/conf.d:rw
 
-        environment:
-            - PHP_DATE_TIMEZONE=${TIMEZONE:-UTC}
-        command: php-fpm
-
     postgresql:
         container_name: orkestra_framework_postgresql
         image: 'docker.io/bitnami/postgresql:11-debian-10'
