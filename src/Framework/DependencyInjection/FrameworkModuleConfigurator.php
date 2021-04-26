@@ -31,8 +31,8 @@ use Morebec\Orkestra\PostgreSqlTimerStorage\PostgreSqlTimerStorage;
 use Morebec\Orkestra\SymfonyBundle\Module\SymfonyOrkestraModuleConfiguratorInterface;
 use Morebec\Orkestra\SymfonyBundle\Module\SymfonyOrkestraModuleContainerConfigurator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorInterface
 {
@@ -64,7 +64,6 @@ class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorIn
         // Projection
         $this->setupProjectors($config);
 
-
         if ($_ENV['APP_ENV'] === 'dev') {
             $config->consoleCommand(OrkestraFrameworkQuickstartConsoleCommand::class);
             $config->controller(DefaultController::class);
@@ -76,12 +75,9 @@ class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorIn
 
     public function configureRoutes(RoutingConfigurator $routes): void
     {
-        $routes->import(__DIR__ . '/../Web', 'annotation');
+        $routes->import(__DIR__.'/../Web', 'annotation');
     }
 
-    /**
-     * @param SymfonyOrkestraModuleContainerConfigurator $config
-     */
     private function setupEventStore(SymfonyOrkestraModuleContainerConfigurator $config): void
     {
         $config->service(PostgreSqlEventStoreConfiguration::class)
@@ -102,18 +98,12 @@ class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorIn
         $config->service(EventStorePositionStorageInterface::class, PostgreSqlEventStorePositionStorage::class);
     }
 
-    /**
-     * @param SymfonyOrkestraModuleContainerConfigurator $config
-     */
     private function setupEventProcessor(SymfonyOrkestraModuleContainerConfigurator $config): void
     {
         $config->service(MessageBusEventPublisher::class);
         $config->consoleCommand(MainEventProcessorConsoleCommand::class);
     }
 
-    /**
-     * @param SymfonyOrkestraModuleContainerConfigurator $config
-     */
     private function setupTimerProcessing(SymfonyOrkestraModuleContainerConfigurator $config): void
     {
         $config->service(TimerManagerInterface::class, TimerManager::class);
@@ -124,9 +114,6 @@ class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorIn
         $config->consoleCommand(MainTimerProcessorConsoleCommand::class);
     }
 
-    /**
-     * @param SymfonyOrkestraModuleContainerConfigurator $config
-     */
     private function setupDocumentStore(SymfonyOrkestraModuleContainerConfigurator $config): void
     {
         $config->service(PostgreSqlDocumentStoreConfiguration::class)->factory(
@@ -135,9 +122,6 @@ class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorIn
         $config->service(PostgreSqlDocumentStore::class);
     }
 
-    /**
-     * @param SymfonyOrkestraModuleContainerConfigurator $config
-     */
     private function setupProjectors(SymfonyOrkestraModuleContainerConfigurator $config): void
     {
         $config->service(PostgreSqlProjectorGroup::class);

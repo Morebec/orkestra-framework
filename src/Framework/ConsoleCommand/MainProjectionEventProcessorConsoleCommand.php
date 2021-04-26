@@ -35,7 +35,7 @@ class MainProjectionEventProcessorConsoleCommand extends AbstractEventProcessorC
         $this->projector = $projector;
 
         $name = $projector instanceof ProjectorGroup ? $projector->getName() : 'PostgreSQL';
-        
+
         parent::__construct($processor, null, "{$name} Projection Processor");
     }
 

@@ -3,7 +3,7 @@ services:
     php:
         container_name: orkestra_framework_php
         build:
-            context: docker/php-fpm
+            context: .
             target: php_dev
         restart: always
         ports:

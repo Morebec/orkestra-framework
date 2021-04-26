@@ -1,19 +1,16 @@
 <?php
 
-
 namespace Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand;
-
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Finder\Finder;
 
 class OrkestraFrameworkQuickstartConsoleCommand extends Command
 {
-    protected static $defaultName = "orkestra:quickstart";
+    protected static $defaultName = 'orkestra:quickstart';
 
     public function __construct()
     {
@@ -52,39 +49,20 @@ class OrkestraFrameworkQuickstartConsoleCommand extends Command
         return self::SUCCESS;
     }
 
-    private function findComposerJson(): ?string
-    {
-        $maxDepth = 10;
-
-        for ($currentDepth = 0, $location = __DIR__; $currentDepth <= $maxDepth; $currentDepth++, $location .= '/..') {
-            // find composer.json in current dir
-            $candidate = "$location/composer.json";
-
-            if (file_exists($candidate)) {
-                return $candidate;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param SymfonyStyle $io
-     */
     protected function handleComposerNamespaces(SymfonyStyle $io): void
     {
         $namespace = $io->askQuestion(new Question('Enter your src namespace', 'App'));
         // Fix / to \
-        $namespace = str_replace('/', "\\", $namespace);
+        $namespace = str_replace('/', '\\', $namespace);
         // Fix \\ to \ then \ to \\
-        $namespace = str_replace('\\\\', "\\", $namespace);
+        $namespace = str_replace('\\\\', '\\', $namespace);
 
-        $testNamespace = $io->askQuestion(new Question('Enter your tests namespace', 'Tests\\' . $namespace));
+        $testNamespace = $io->askQuestion(new Question('Enter your tests namespace', 'Tests\\'.$namespace));
 
         // Fix / to \
-        $testNamespace = str_replace('/', "\\", $testNamespace);
+        $testNamespace = str_replace('/', '\\', $testNamespace);
         // Fix \\ to \ then \ to \\
-        $testNamespace = str_replace('\\\\', "\\", $testNamespace);
+        $testNamespace = str_replace('\\\\', '\\', $testNamespace);
 
         // Convert \ to composer json
 //        $namespace = str_replace("\\", '\\\\', $namespace);
@@ -106,24 +84,54 @@ class OrkestraFrameworkQuickstartConsoleCommand extends Command
 
         $composer = json_decode(file_get_contents($composerJson), true);
 
-
-
-        if (array_key_exists($namespace, $composer['autoload']['psr-4'])) {
+        if (\array_key_exists($namespace, $composer['autoload']['psr-4'])) {
             $io->note('Namespace already defined, skipping ...');
         } else {
             $composer['autoload']['psr-4'][$namespace] = 'src';
         }
 
-
-        if (array_key_exists($testNamespace, $composer['autoload-dev']['psr-4'])) {
+        if (\array_key_exists($testNamespace, $composer['autoload-dev']['psr-4'])) {
             $io->note('Test namespace already defined, skipping ...');
         } else {
             $composer['autoload-dev']['psr-4'][$testNamespace] = 'tests';
         }
 
-        $composerUpdated = json_encode($composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $composerUpdated = json_encode($composer, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES);
         str_replace('\/', '/', $composerUpdated);
         file_put_contents($composerJson, $composerUpdated);
+    }
+
+    protected function handleEnvLocal(SymfonyStyle $io): void
+    {
+        $envFile = $this->findEnvFile();
+        $io->text('Creating .env.local ...');
+        if ($envFile) {
+            $projectDir = \dirname($envFile);
+            $localEnvFile = $projectDir.'/.env.local';
+            if (!file_exists($localEnvFile)) {
+                copy($envFile, $localEnvFile);
+            } else {
+                $io->note('.env.local already exists, skipping');
+            }
+        } else {
+            $io->warning('No env file found!');
+        }
+    }
+
+    private function findComposerJson(): ?string
+    {
+        $maxDepth = 10;
+
+        for ($currentDepth = 0, $location = __DIR__; $currentDepth <= $maxDepth; $currentDepth++, $location .= '/..') {
+            // find composer.json in current dir
+            $candidate = "$location/composer.json";
+
+            if (file_exists($candidate)) {
+                return $candidate;
+            }
+        }
+
+        return null;
     }
 
     private function findEnvFile(): ?string
@@ -140,25 +148,5 @@ class OrkestraFrameworkQuickstartConsoleCommand extends Command
         }
 
         return null;
-    }
-
-    /**
-     * @param SymfonyStyle $io
-     */
-    protected function handleEnvLocal(SymfonyStyle $io): void
-    {
-        $envFile = $this->findEnvFile();
-        $io->text('Creating .env.local ...');
-        if ($envFile) {
-            $projectDir = dirname($envFile);
-            $localEnvFile = $projectDir . '/.env.local';
-            if (!file_exists($localEnvFile)) {
-                copy($envFile, $localEnvFile);
-            } else {
-                $io->note('.env.local already exists, skipping');
-            }
-        } else {
-            $io->warning('No env file found!');
-        }
     }
 }

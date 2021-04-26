@@ -1,0 +1,89 @@
+#!/usr/bin/bash
+
+################################################################################
+# Help                                                                         #
+################################################################################
+displayHelp()
+{
+   # Display Help
+   echo ""
+   echo "Orkestra Monorepo Dev"
+   echo "====================="
+   echo ""
+   echo "This script allows to ease the development of this Monorepo by providing shorthands for the most common commands."
+   echo ""
+   echo "Usage:"
+   echo "  ok [options] [COMMAND] [ARGS...]"
+   echo "Commands:"
+   echo "  up         Merges the composer.json of the different components."
+   echo "  down       Fixes the files for coding style."
+   echo "  restart    Fixes the files for coding style."
+   echo "  php        Fixes the files for coding style."
+   echo "  console    Fixes the files for coding style."
+   echo "  composer   Fixes the files for coding style."
+   echo "  yarn       Fixes the files for coding style."
+   echo "  npm        Fixes the files for coding style."
+   echo "  pgsql      Fixes the files for coding style."
+   echo "  help       Displays this help message."
+   echo
+}
+
+command=$1
+
+
+case "$command" in
+  up|start)
+    shift 1
+    docker-compose up -d "$@"
+  ;;
+
+  restart)
+    shift 1
+    docker-compose "$@"
+  ;;
+
+  down|stop)
+    shift 1
+    docker-compose down "$@"
+  ;;
+
+  php)
+    shift 1
+    docker-compose exec php php "$@"
+  ;;
+
+  console)
+    shift 1
+    docker-compose exec php bash -c "/srv/app/bin/console $@"
+  ;;
+
+  composer)
+    shift 1
+    docker-compose exec php composer "$@"
+  ;;
+
+  yarn)
+    shift 1
+    docker-compose exec php yarn "$@"
+  ;;
+
+  npm)
+    shift 1
+    docker-compose exec php npm "$@"
+  ;;
+
+  bash)
+    shift 1
+    docker-compose exec php bash -c "$@"
+  ;;
+
+  pgsql)
+    shift 1
+    docker-compose exec postgresql bash -c "psql -U postgres $@"
+  ;;
+
+  *)
+    displayHelp
+    # docker-compose "$@"
+  ;;
+esac
