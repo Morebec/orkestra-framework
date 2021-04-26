@@ -6,7 +6,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": ">=7.3",
+        "php": ">=7.",
         "morebec/orkestra-datetime": "^2.1",
         "morebec/orkestra-enum": "^2.1",
         "morebec/orkestra-normalization": "^2.1",
