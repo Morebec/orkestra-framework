@@ -1,6 +1,6 @@
 <?php
 
-namespace Morebec\Orkestra\OrkestraFramework;
+namespace Morebec\Orkestra\OrkestraFramework\Framework;
 
 use Morebec\Orkestra\SymfonyBundle\OrkestraKernel;
 

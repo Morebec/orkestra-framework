@@ -1,6 +1,6 @@
 <?php
 
-use Morebec\Orkestra\OrkestraFramework\Kernel;
+use Morebec\Orkestra\OrkestraFramework\Framework\Kernel;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;

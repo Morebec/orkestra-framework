@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use Morebec\Orkestra\OrkestraFramework\Kernel;
+use Morebec\Orkestra\OrkestraFramework\Framework\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Dotenv\Dotenv;
