@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
@@ -186,13 +187,18 @@ class StartRoadRunnerConsoleCommand extends Command implements SignalableCommand
             (new PhpExecutableFinder())->find(),
             $this->projectDir.'/vendor/bin/rr',
             'get-binary',
-            '-n'
+            '-n',
         ]);
 
-        $io = $this->io;
-        $process->run(static function ($type, $buffer) use ($io) {
-                $io->writeln('  '.$buffer);
-        });
+        try {
+            $process->mustRun();
+        } catch (ProcessFailedException $exception) {
+            $this->io->error([
+                'An error occurred:',
+                $exception->getMessage(),
+            ]);
+            exit(self::FAILURE);
+        }
 
         // The file is downloaded at the root of the project directory, we will move it to the "bin" directory.
         $downloadedFile = $this->projectDir.'/rr';
