@@ -173,10 +173,9 @@ class StartRoadRunnerConsoleCommand extends Command implements SignalableCommand
 
     private function ensureRoadRunnerBinaryDownloaded(): void
     {
-        $finder = new PhpExecutableFinder();
         $targetBinaryLocation = $this->projectDir.'/bin/rr';
 
-        if ($finder->find($targetBinaryLocation) !== false) {
+        if (file_exists($targetBinaryLocation)) {
             return;
         }
 
@@ -184,6 +183,7 @@ class StartRoadRunnerConsoleCommand extends Command implements SignalableCommand
         $this->io->writeln('Downloading Road Runner ...');
         // Download binary
         $process = new Process([
+            (new PhpExecutableFinder())->find(),
             $this->projectDir.'vendor/bin/rr',
             'get-binary',
         ]);
