@@ -10,21 +10,22 @@ displayHelp()
    echo "Orkestra"
    echo "====================="
    echo ""
-   echo "This script allows to ease the development of this Monorepo by providing shorthands for the most common commands."
+   echo "This script allows to ease the development of an application using Orkestra Framework."
    echo ""
    echo "Usage:"
    echo "  ok [options] [COMMAND] [ARGS...]"
    echo "Commands:"
-   echo "  up         Merges the composer.json of the different components."
-   echo "  down       Fixes the files for coding style."
-   echo "  restart    Fixes the files for coding style."
-   echo "  php        Fixes the files for coding style."
-   echo "  console    Fixes the files for coding style."
-   echo "  composer   Fixes the files for coding style."
-   echo "  yarn       Fixes the files for coding style."
-   echo "  npm        Fixes the files for coding style."
-   echo "  pgsql      Fixes the files for coding style."
-   echo "  help       Displays this help message."
+   echo "  up|start         Starts the containers"
+   echo "  down|start       Stops the containers"
+   echo "  restart          Reloads the containers."
+   echo "  php              Executes the PHP binary from the PHP container."
+   echo "  console          Executes the Symfony console from the PHP container."
+   echo "  composer         Executes composer from the PHP container."
+   echo "  yarn             Executes yarn from the PHP container."
+   echo "  npm              Executes npm from the PHP container."
+   echo "  pgsql            Executes pgsql from the PHP container."
+   echo "  supervisorctl    Executes supervisorctl from the PHP container."
+   echo "  help             Displays this help message."
    echo
 }
 
@@ -80,6 +81,11 @@ case "$command" in
   pgsql)
     shift 1
     docker-compose exec postgresql bash -c "psql -U postgres $@"
+  ;;
+
+  supervisorctl)
+    shift 1
+    docker-compose exec bash -c "supervisorctl -c /etc/supervisor.d/supervisor.ini"
   ;;
 
   *)
