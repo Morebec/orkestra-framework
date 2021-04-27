@@ -8,7 +8,7 @@ use Morebec\Orkestra\EventSourcing\EventProcessor\SubscribedTrackingEventProcess
 use Morebec\Orkestra\EventSourcing\EventStore\EventStoreInterface;
 use Morebec\Orkestra\PostgreSqlEventStore\PostgreSqlEventProcessor;
 use Morebec\Orkestra\PostgreSqlEventStore\PostgreSqlEventStore;
-use Morebec\OrkestraSymfonyBundle\Command\AbstractEventProcessorConsoleCommand;
+use Morebec\Orkestra\SymfonyBundle\Command\AbstractEventProcessorConsoleCommand;
 
 class MainEventProcessorConsoleCommand extends AbstractEventProcessorConsoleCommand
 {

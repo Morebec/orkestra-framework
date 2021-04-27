@@ -7,12 +7,13 @@ use Morebec\Orkestra\Messaging\Timer\MessageBusTimerPublisher;
 use Morebec\Orkestra\Messaging\Timer\PollingTimerProcessor;
 use Morebec\Orkestra\Messaging\Timer\PollingTimerProcessorOptions;
 use Morebec\Orkestra\Messaging\Timer\TimerStorageInterface;
-use Morebec\Orkestra\SymfonyBundle\Command\AbstractInterruptibleConsoleCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\SignalableCommandInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class MainTimerProcessorConsoleCommand extends AbstractInterruptibleConsoleCommand
+class MainTimerProcessorConsoleCommand extends Command implements SignalableCommandInterface
 {
     protected static $defaultName = 'orkestra:timer-processor';
     /**
@@ -29,6 +30,9 @@ class MainTimerProcessorConsoleCommand extends AbstractInterruptibleConsoleComma
      */
     private $timerStorage;
 
+    /** @var SymfonyStyle */
+    private $io;
+
     public function __construct(
         MessageBusTimerPublisher $timerPublisher,
         ClockInterface $clock,
@@ -40,27 +44,36 @@ class MainTimerProcessorConsoleCommand extends AbstractInterruptibleConsoleComma
         $this->timerStorage = $timerStorage;
     }
 
+    public function getSubscribedSignals(): array
+    {
+        return [\SIGTERM, \SIGINT];
+    }
+
+    public function handleSignal(int $signal): void
+    {
+        $this->io->writeln('Timer Processor Stopping ...');
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $io = new SymfonyStyle($input, $output);
+        $this->io = new SymfonyStyle($input, $output);
 
-        $io->title('Timer Processor');
+        $this->io->title('Timer Processor');
 
         $options = new PollingTimerProcessorOptions();
         $options->withName('main');
         $options->withMaximumProcessingTime(PollingTimerProcessorOptions::INFINITE);
         $processor = new PollingTimerProcessor($this->clock, $this->timerPublisher, $this->timerStorage, $options);
 
-        $io->writeln('Timer Processor Started.');
+        $this->io->writeln('Timer Processor Started.');
         $processor->start();
 
-        $io->writeln('Timer Processor Stopped.');
+        $this->io->writeln('Timer Processor Stopped.');
 
         return self::SUCCESS;
     }
 
     protected function onInterruption($input, $output): void
     {
-        $output->writeln('Timer Processor Stopping ...');
     }
 }
