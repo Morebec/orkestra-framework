@@ -189,7 +189,7 @@ class StartRoadRunnerConsoleCommand extends Command implements SignalableCommand
         ]);
 
         $io = $this->io;
-        $process->wait(static function ($type, $buffer) use ($io) {
+        $process->run(static function ($type, $buffer) use ($io) {
             if ($type === 'err') {
                 $io->error($buffer);
             } else {
