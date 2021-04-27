@@ -186,15 +186,12 @@ class StartRoadRunnerConsoleCommand extends Command implements SignalableCommand
             (new PhpExecutableFinder())->find(),
             $this->projectDir.'/vendor/bin/rr',
             'get-binary',
+            '-n'
         ]);
 
         $io = $this->io;
         $process->run(static function ($type, $buffer) use ($io) {
-            if ($type === 'err') {
-                $io->error('  '.$buffer);
-            } else {
                 $io->writeln('  '.$buffer);
-            }
         });
 
         // The file is downloaded at the root of the project directory, we will move it to the "bin" directory.
@@ -202,7 +199,7 @@ class StartRoadRunnerConsoleCommand extends Command implements SignalableCommand
         rename($downloadedFile, $targetBinaryLocation);
 
         // Ensure it is executable
-        chmod($downloadedFile, 755);
+        chmod($targetBinaryLocation, 755);
 
         $this->io->writeln([
             '',
