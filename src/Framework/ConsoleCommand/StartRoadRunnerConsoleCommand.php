@@ -140,7 +140,7 @@ class StartRoadRunnerConsoleCommand extends Command implements SignalableCommand
         $configuration = $this->loadConfiguration($input);
 
         $process = new Process([
-            "$this->projectDir/vendor/bin/rr", 'serve',
+            "$this->projectDir/bin/rr", 'serve',
             '-c', $configuration['filename'],
             '-o', "http.address={$configuration['http']['address']}",
             '-o', "status.address={$configuration['status']['address']}",

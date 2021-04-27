@@ -11,7 +11,7 @@ docker_php:
 	docker-compose exec php bash
 
 rr_dev:
-	./vendor/bin/rr serve -c .rr.dev.yaml --dotenv=.
+	./bin/rr serve -c .rr.dev.yaml --dotenv=.
 
 rr_prod:
-	./vendor/bin/rr serve -c .rr.yaml --dotenv=.
+	./bin/rr serve -c .rr.yaml --dotenv=.

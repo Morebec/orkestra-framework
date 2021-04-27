@@ -33,9 +33,22 @@ Install composer dependencies
 composer install
 ```
 
+Start Docker container
 ```shell
-bin/console orkestra:quickstart
+bin/ok up
 ```
+
+Launch Quickstart utility
+```shell
+bin/ok console orkestra:quickstart
+```
+
+Restart Docker Container to have the latest changes
+```shell
+bin/ok restart
+```
+
+Go to `http://localhost:9090` to see the application live.
 
 ## Docker and docker-compose
 A Makefile is available with predefined commands to start, restart and stop docker containers:
