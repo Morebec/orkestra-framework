@@ -1,7 +1,6 @@
 version: '3.7'
 services:
     php:
-        container_name: orkestra_framework_php
         build:
             context: .
             target: php_dev
@@ -20,7 +19,6 @@ services:
             - ./docker/php-fpm/conf.d:/usr/local/etc/php/conf.d:rw
 
     postgresql:
-        container_name: orkestra_framework_postgresql
         image: 'docker.io/bitnami/postgresql:11-debian-10'
         ports:
             - 5432:5432
