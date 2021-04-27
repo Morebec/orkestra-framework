@@ -7,7 +7,7 @@ displayHelp()
 {
    # Display Help
    echo ""
-   echo "Orkestra Monorepo Dev"
+   echo "Orkestra"
    echo "====================="
    echo ""
    echo "This script allows to ease the development of this Monorepo by providing shorthands for the most common commands."
