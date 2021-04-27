@@ -39,7 +39,7 @@ case "$command" in
 
   restart)
     shift 1
-    docker-compose "$@"
+    docker-compose restart "$@"
   ;;
 
   down|stop)
@@ -74,7 +74,7 @@ case "$command" in
 
   bash)
     shift 1
-    docker-compose exec php bash -c "$@"
+    docker-compose exec php bash
   ;;
 
   pgsql)

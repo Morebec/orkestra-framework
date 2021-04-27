@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
 
@@ -132,6 +133,9 @@ class StartRoadRunnerConsoleCommand extends Command implements SignalableCommand
         $this->io = new SymfonyStyle($input, $output);
         $this->io->title('Road Runner');
 
+        // First ensure road runner has been downloaded and is available.
+        $this->ensureRoadRunnerBinaryDownloaded();
+
         $configuration = $this->loadConfiguration($input);
 
         $process = new Process([
@@ -165,5 +169,45 @@ class StartRoadRunnerConsoleCommand extends Command implements SignalableCommand
         $this->io->writeln('Server stopped ...');
 
         return $process->getExitCode();
+    }
+
+    private function ensureRoadRunnerBinaryDownloaded(): void
+    {
+        $finder = new PhpExecutableFinder();
+        $targetBinaryLocation = $this->projectDir.'/bin/rr';
+
+        if ($finder->find($targetBinaryLocation) !== false) {
+            return;
+        }
+
+        $this->io->warning(sprintf('The Road Runner binary was not found at: "%s".', $targetBinaryLocation));
+        $this->io->writeln('Downloading Road Runner ...');
+        // Download binary
+        $process = new Process([
+            $this->projectDir.'vendor/bin/rr',
+            'get-binary',
+        ]);
+
+        $io = $this->io;
+        $process->wait(static function ($type, $buffer) use ($io) {
+            if ($type === 'err') {
+                $io->error($buffer);
+            } else {
+                $io->writeln($buffer);
+            }
+        });
+
+        // The file is downloaded at the root of the project directory, we will move it to the "bin" directory.
+        $downloadedFile = $this->projectDir.'/rr';
+        rename($downloadedFile, $targetBinaryLocation);
+
+        // Ensure it is executable
+        chmod($downloadedFile, 755);
+
+        $this->io->writeln([
+            '',
+            'Downloaded Road Runner binary <info>successfully</info>',
+            '',
+        ]);
     }
 }
