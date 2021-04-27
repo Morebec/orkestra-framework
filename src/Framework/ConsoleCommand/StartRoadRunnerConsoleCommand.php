@@ -184,16 +184,16 @@ class StartRoadRunnerConsoleCommand extends Command implements SignalableCommand
         // Download binary
         $process = new Process([
             (new PhpExecutableFinder())->find(),
-            $this->projectDir.'vendor/bin/rr',
+            $this->projectDir.'/vendor/bin/rr',
             'get-binary',
         ]);
 
         $io = $this->io;
         $process->run(static function ($type, $buffer) use ($io) {
             if ($type === 'err') {
-                $io->error($buffer);
+                $io->error('  '.$buffer);
             } else {
-                $io->writeln($buffer);
+                $io->writeln('  '.$buffer);
             }
         });
 
