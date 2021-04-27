@@ -33,7 +33,7 @@ Install composer dependencies
 composer install
 ```
 
-Start Docker container
+Start Docker containers
 ```shell
 bin/ok up
 ```
@@ -43,70 +43,78 @@ Launch Quickstart utility
 bin/ok console orkestra:quickstart
 ```
 
-Restart Docker Container to have the latest changes
+Restart Docker Containers to have the latest changes
 ```shell
 bin/ok restart
 ```
 
 Go to `http://localhost:9090` to see the application live.
 
-## Docker and docker-compose
-A Makefile is available with predefined commands to start, restart and stop docker containers:
+## Ok binary
+The Ok binary contains commands to simply perform actions against the docker containers:
 
 To start containers:
 ```shell
-make docker_start 
+bin/ok start 
 ```
 
 To restart containers:
 ```shell
-make docker_restart
+bin/ok restart
 ```
 
 To stop containers:
 ```shell
-make docker_stop
+bin/ok stop
 ```
 
 To access the PHP container
 ```shell
-make docker_php
+bin/ok bash
 ```
+
+See all the commands available by doing:
+
+````shell
+bin/ok help
+````
 
 ## Console Commands
 The framework is shipped with console commands to operate the Projections, the Event Processor and the Timer Processor:
 
+> These commands are supervised using supervisord to ensure they are always running and restarted in the event that they would fail.
+
 ### Debugging Messaging
 Use the following to see the class map of messages
 ```shell
-bin/console orkestra:messaging:debug-classmap
+bin/ok console orkestra:messaging:debug-classmap
 ```
 
 To see which messages are routed to which handlers:
 ```shell
-bin/console orkestra:messaging:debug-router
+bin/ok console orkestra:messaging:debug-router
 ```
 
 ### Event Processor
 To show the progress of the event processor:
 ```shell
-bin/console orkestra:event-processor progress
+bin/ok console orkestra:event-processor progress
 ```
 
 To continuously run the processor:
 ```shell
-bin/console orkestra:event-processor start
+bin/ok console orkestra:event-processor start
 ````
 
 To replay the events
 ```shell
-bin/console orkestra:event-processor replay
+bin/ok console orkestra:event-processor replay
 ````
 > Be advised that this command should not be used in production, and can have unexpected side effects.
 
 To reset the processor to the start of the stream:
 ```shell
-bin/console orkestra:event-processor reset
+bin/ok console orkestra:event-processor reset
 ````
 > Be advised that this command should not be used in production, and can have unexpected side effects.
 
@@ -114,28 +122,28 @@ bin/console orkestra:event-processor reset
 ### Timer Processor
 To start the timer processor
 ```shell
-bin/console orkestra:timer-processor
+bin/ok console orkestra:timer-processor
 ```
 
 ### Projection Processor
 To show the progress of the projection processor:
 ```shell
-bin/console orkestra:projection-processor progress
+bin/ok console orkestra:projection-processor progress
 ```
 
 To continuously run the processor:
 ```shell
-bin/console orkestra:projection-processor start
+bin/ok console orkestra:projection-processor start
 ````
 
 To replay the projections
 ```shell
-bin/console orkestra:projection-processor replay
+bin/ok console orkestra:projection-processor replay
 ````
 
 To reset the processor to the start of the stream:
 ```shell
-bin/console orkestra:projection-processor reset
+bin/ok console orkestra:projection-processor reset
 ````
 
 ## License

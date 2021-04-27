@@ -24,7 +24,6 @@ foreach ($autoloaders as $autoloader) {
     }
 }
 
-
 if (!class_exists(Application::class) || !class_exists(Dotenv::class)) {
     throw new LogicException('You need to add "symfony/framework-bundle" and "symfony/dotenv" as Composer dependencies.');
 }

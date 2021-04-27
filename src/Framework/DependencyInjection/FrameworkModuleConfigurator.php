@@ -20,6 +20,11 @@ use Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand\MainTimerProcess
 use Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand\OrkestraFrameworkQuickstartConsoleCommand;
 use Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand\StartRoadRunnerConsoleCommand;
 use Morebec\Orkestra\OrkestraFramework\Framework\Projection\PostgreSqlProjectorGroup;
+use Morebec\Orkestra\OrkestraFramework\Framework\Web\Api\ApiExceptionListener;
+use Morebec\Orkestra\OrkestraFramework\Framework\Web\Api\ApiRequestListener;
+use Morebec\Orkestra\OrkestraFramework\Framework\Web\Api\CommandController;
+use Morebec\Orkestra\OrkestraFramework\Framework\Web\Api\QueryController;
+use Morebec\Orkestra\OrkestraFramework\Framework\Web\Api\WebSocketController;
 use Morebec\Orkestra\OrkestraFramework\Framework\Web\DefaultController;
 use Morebec\Orkestra\PostgreSqlDocumentStore\PostgreSqlDocumentStore;
 use Morebec\Orkestra\PostgreSqlDocumentStore\PostgreSqlDocumentStoreConfiguration;
@@ -64,18 +69,24 @@ class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorIn
         // Projection
         $this->setupProjectors($config);
 
+        // API Listeners
+        $this->setupApiServices($config);
+
+        // Road Runner Commands
+        $config->consoleCommand(StartRoadRunnerConsoleCommand::class);
+
         if ($_ENV['APP_ENV'] === 'dev') {
             $config->consoleCommand(OrkestraFrameworkQuickstartConsoleCommand::class);
             $config->controller(DefaultController::class);
         }
-
-        // Road Runner Commands
-        $config->consoleCommand(StartRoadRunnerConsoleCommand::class);
     }
 
     public function configureRoutes(RoutingConfigurator $routes): void
     {
         $routes->import(__DIR__.'/../Web', 'annotation');
+
+        // API
+        $this->setupApiRoutes($routes);
     }
 
     private function setupEventStore(SymfonyOrkestraModuleContainerConfigurator $config): void
@@ -126,5 +137,27 @@ class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorIn
     {
         $config->service(PostgreSqlProjectorGroup::class);
         $config->consoleCommand(MainProjectionEventProcessorConsoleCommand::class)->arg(0, service(PostgreSqlProjectorGroup::class));
+    }
+
+    /**
+     * @param SymfonyOrkestraModuleContainerConfigurator $config
+     */
+    protected function setupApiServices(SymfonyOrkestraModuleContainerConfigurator $config): void
+    {
+        $config->service(ApiExceptionListener::class);
+        $config->service(ApiRequestListener::class);
+        $config->service(CommandController::class);
+        $config->service(QueryController::class);
+        $config->service(WebSocketController::class);
+    }
+
+    /**
+     * @param RoutingConfigurator $routes
+     */
+    protected function setupApiRoutes(RoutingConfigurator $routes): void
+    {
+        $routes->import(__DIR__ . '/../Web/Api', 'annotation')
+            ->namePrefix('api.v1.')
+            ->prefix('/api/v1');
     }
 }
