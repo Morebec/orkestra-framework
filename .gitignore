@@ -23,10 +23,6 @@
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
-###> baldinof/roadrunner-bundle ###
-/bin/rr
-###< baldinof/roadrunner-bundle ###
-
 ###> supervisord
 supervisord.log
 supervisord.pid
