@@ -1,13 +1,12 @@
 <?php
 
-
 namespace Morebec\Orkestra\OrkestraFramework\Framework\Web\Api;
-
 
 use Morebec\Orkestra\Messaging\MessageHeaders;
 use Morebec\Orkestra\OrkestraServer\Api\v1\InvalidApiRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CommandController extends AbstractApiController
 {
@@ -32,7 +31,7 @@ class CommandController extends AbstractApiController
             );
         }
         $response = $this->messageBus->sendMessage($command, new MessageHeaders([
-            MessageHeaders::APPLICATION_ID => 'api'
+            MessageHeaders::APPLICATION_ID => 'api',
         ]));
 
         return $this->createResponse($command, $response);

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Morebec\Orkestra\OrkestraFramework\Framework\Web\Api;
-
 
 use Morebec\Orkestra\Exceptions\NotFoundExceptionInterface;
 use Morebec\Orkestra\Messaging\Authorization\UnauthorizedException;

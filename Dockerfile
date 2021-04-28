@@ -39,7 +39,8 @@ RUN apk add --no-cache \
     php7-iconv \
     php7-session \
     php7-dom \
-    php7-tokenizer
+    php7-tokenizer \
+    php7-posix
 
 # Install Composer
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser

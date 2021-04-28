@@ -83,10 +83,26 @@ class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorIn
 
     public function configureRoutes(RoutingConfigurator $routes): void
     {
-        $routes->import(__DIR__.'/../Web', 'annotation');
+        $routes->import(__DIR__.'/../Web/DefaultController.php', 'annotation');
 
         // API
         $this->setupApiRoutes($routes);
+    }
+
+    protected function setupApiServices(SymfonyOrkestraModuleContainerConfigurator $config): void
+    {
+        $config->service(ApiExceptionListener::class);
+        $config->service(ApiRequestListener::class);
+        $config->service(CommandController::class);
+        $config->service(QueryController::class);
+        $config->service(WebSocketController::class);
+    }
+
+    protected function setupApiRoutes(RoutingConfigurator $routes): void
+    {
+        $routes->import(__DIR__.'/../Web/Api', 'annotation')
+            ->namePrefix('api.v1.')
+            ->prefix('/api/v1');
     }
 
     private function setupEventStore(SymfonyOrkestraModuleContainerConfigurator $config): void
@@ -137,27 +153,5 @@ class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorIn
     {
         $config->service(PostgreSqlProjectorGroup::class);
         $config->consoleCommand(MainProjectionEventProcessorConsoleCommand::class)->arg(0, service(PostgreSqlProjectorGroup::class));
-    }
-
-    /**
-     * @param SymfonyOrkestraModuleContainerConfigurator $config
-     */
-    protected function setupApiServices(SymfonyOrkestraModuleContainerConfigurator $config): void
-    {
-        $config->service(ApiExceptionListener::class);
-        $config->service(ApiRequestListener::class);
-        $config->service(CommandController::class);
-        $config->service(QueryController::class);
-        $config->service(WebSocketController::class);
-    }
-
-    /**
-     * @param RoutingConfigurator $routes
-     */
-    protected function setupApiRoutes(RoutingConfigurator $routes): void
-    {
-        $routes->import(__DIR__ . '/../Web/Api', 'annotation')
-            ->namePrefix('api.v1.')
-            ->prefix('/api/v1');
     }
 }

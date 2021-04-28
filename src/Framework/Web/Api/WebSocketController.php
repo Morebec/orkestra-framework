@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Morebec\Orkestra\OrkestraFramework\Framework\Web\Api;
 
 /**
@@ -9,5 +8,4 @@ namespace Morebec\Orkestra\OrkestraFramework\Framework\Web\Api;
  */
 class WebSocketController extends AbstractApiController
 {
-
 }

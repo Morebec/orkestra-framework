@@ -1,15 +1,13 @@
 <?php
 
-
 namespace Morebec\Orkestra\OrkestraFramework\Framework\Web\Api;
-
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * The API can return two types of responses:
  * - Successes
- * - Failures
+ * - Failures.
  *
  * Both types of responses follow a similar schema:
  * - status: indicates if it is a success or failure response
@@ -21,29 +19,25 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class JsonApiResponseBuilder
 {
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     /**
      * Creates a success response.
-     * @param string $payload
-     * @param int $httpStatusCode
-     * @return JsonResponse
      */
     public static function createSuccess(string $payload, int $httpStatusCode = JsonResponse::HTTP_OK): JsonResponse
     {
         return new JsonResponse([
             'status' => 'succeeded',
-            'data' => $payload
+            'data' => $payload,
         ], $httpStatusCode);
     }
 
     /**
      * Creates a response representing a failure/error.
-     * @param string $errorType
-     * @param string $errorMessage
+     *
      * @param null $payload
-     * @param int $httpStatusCode
-     * @return JsonResponse
      */
     public static function createFailure(string $errorType, string $errorMessage, $payload = null, int $httpStatusCode = JsonResponse::HTTP_BAD_REQUEST): JsonResponse
     {

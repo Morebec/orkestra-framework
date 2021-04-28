@@ -30,7 +30,7 @@ class QueryController extends AbstractApiController
             );
         }
         $response = $this->messageBus->sendMessage($query, new MessageHeaders([
-            MessageHeaders::APPLICATION_ID => 'api'
+            MessageHeaders::APPLICATION_ID => 'api',
         ]));
 
         return $this->createResponse($query, $response);
