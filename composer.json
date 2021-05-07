@@ -15,6 +15,7 @@
         "morebec/orkestra-event-sourcing": "^2.1",
         "morebec/orkestra-postgresql-eventstore": "^2.1",
         "morebec/orkestra-postgresql-timer-storage": "^2.1",
+        "morebec/orkestra-postgresql-document-store": "^2.1",
         "morebec/orkestra-retry": "^2.1",
         "morebec/orkestra-symfony-bundle": "^2.1",
         "ext-ctype": "*",
