@@ -109,13 +109,14 @@ class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorIn
     {
         $config->service(PostgreSqlEventStoreConfiguration::class)
             ->factory([PostgreSqlEventStoreConfigurationFactory::class, 'create']);
-        $config->service(PostgreSqlEventStore::class);
+        $config->service(PostgreSqlEventStore::class)
+            ->alias(EventStoreInterface::class, PostgreSqlEventStore::class)
+        ;
 
         $config->service(UpcastingEventStoreDecorator::class)
             ->decorate(EventStoreInterface::class, null, 1)
             ->args([service('.inner')]);
 
-        $config->service(EventStoreInterface::class, PostgreSqlEventStore::class);
         $config->service(MessageBusContextEventStoreDecorator::class)
             ->decorate(EventStoreInterface::class, null, 0)
             ->args([service('.inner')]);
