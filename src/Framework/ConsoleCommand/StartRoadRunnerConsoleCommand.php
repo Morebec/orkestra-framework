@@ -64,8 +64,6 @@ class StartRoadRunnerConsoleCommand extends Command implements SignalableCommand
             $config['status']['address'] = str_replace(":{$configPort}", ":{$healthCheckPort}", $config['status']['address']);
         }
 
-        // dump($config);
-
         return $config;
     }
 
