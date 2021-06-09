@@ -10,13 +10,13 @@ use Morebec\Orkestra\EventSourcing\EventProcessor\MessageBusEventPublisher;
 use Morebec\Orkestra\EventSourcing\EventStore\EventStoreInterface;
 use Morebec\Orkestra\EventSourcing\EventStore\MessageBusContextEventStoreDecorator;
 use Morebec\Orkestra\EventSourcing\EventStore\UpcastingEventStoreDecorator;
-use Morebec\Orkestra\Messaging\Timer\MessageBusTimerPublisher;
-use Morebec\Orkestra\Messaging\Timer\TimerManager;
-use Morebec\Orkestra\Messaging\Timer\TimerManagerInterface;
-use Morebec\Orkestra\Messaging\Timer\TimerStorageInterface;
+use Morebec\Orkestra\Messaging\Timeout\MessageBusTimeoutPublisher;
+use Morebec\Orkestra\Messaging\Timeout\TimeoutManager;
+use Morebec\Orkestra\Messaging\Timeout\TimeoutManagerInterface;
+use Morebec\Orkestra\Messaging\Timeout\TimeoutStorageInterface;
 use Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand\MainEventProcessorConsoleCommand;
 use Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand\MainProjectionEventProcessorConsoleCommand;
-use Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand\MainTimerProcessorConsoleCommand;
+use Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand\MainTimeoutProcessorConsoleCommand;
 use Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand\OrkestraFrameworkQuickstartConsoleCommand;
 use Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand\StartRoadRunnerConsoleCommand;
 use Morebec\Orkestra\OrkestraFramework\Framework\Projection\PostgreSqlProjectorGroup;
@@ -32,7 +32,7 @@ use Morebec\Orkestra\PostgreSqlEventStore\PostgreSqlEventStore;
 use Morebec\Orkestra\PostgreSqlEventStore\PostgreSqlEventStoreConfiguration;
 use Morebec\Orkestra\PostgreSqlEventStore\PostgreSqlEventStorePositionStorage;
 use Morebec\Orkestra\PostgreSqlEventStore\PostgreSqlEventStorePositionStorageConfiguration;
-use Morebec\Orkestra\PostgreSqlTimerStorage\PostgreSqlTimerStorage;
+use Morebec\Orkestra\PostgreSqlTimeoutStorage\PostgreSqlTimeoutStorage;
 use Morebec\Orkestra\SymfonyBundle\Module\SymfonyOrkestraModuleConfiguratorInterface;
 use Morebec\Orkestra\SymfonyBundle\Module\SymfonyOrkestraModuleContainerConfigurator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -60,8 +60,8 @@ class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorIn
         // Event Processing
         $this->setupEventProcessor($config);
 
-        // Timers and Timer Processing
-        $this->setupTimerProcessing($config);
+        // Timeouts and Timeout Processing
+        $this->setupTimeoutProcessing($config);
 
         // General Storage
         $this->setupDocumentStore($config);
@@ -132,14 +132,14 @@ class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorIn
         $config->consoleCommand(MainEventProcessorConsoleCommand::class);
     }
 
-    private function setupTimerProcessing(SymfonyOrkestraModuleContainerConfigurator $config): void
+    private function setupTimeoutProcessing(SymfonyOrkestraModuleContainerConfigurator $config): void
     {
-        $config->service(TimerManagerInterface::class, TimerManager::class);
-        $config->service(PostgreSqlTimerStorageFactory::class);
-        $config->service(TimerStorageInterface::class, PostgreSqlTimerStorage::class)
-            ->factory([service(PostgreSqlTimerStorageFactory::class), 'create']);
-        $config->service(MessageBusTimerPublisher::class);
-        $config->consoleCommand(MainTimerProcessorConsoleCommand::class);
+        $config->service(TimeoutManagerInterface::class, TimeoutManager::class);
+        $config->service(PostgreSqlTimoutStorageFactory::class);
+        $config->service(TimeoutStorageInterface::class, PostgreSqlTimeoutStorage::class)
+            ->factory([service(PostgreSqlTimoutStorageFactory::class), 'create']);
+        $config->service(MessageBusTimeoutPublisher::class);
+        $config->consoleCommand(MainTimeoutProcessorConsoleCommand::class);
     }
 
     private function setupDocumentStore(SymfonyOrkestraModuleContainerConfigurator $config): void

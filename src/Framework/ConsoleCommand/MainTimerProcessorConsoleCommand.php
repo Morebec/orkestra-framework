@@ -3,10 +3,10 @@
 namespace Morebec\Orkestra\OrkestraFramework\Framework\ConsoleCommand;
 
 use Morebec\Orkestra\DateTime\ClockInterface;
-use Morebec\Orkestra\Messaging\Timer\MessageBusTimerPublisher;
-use Morebec\Orkestra\Messaging\Timer\PollingTimerProcessor;
-use Morebec\Orkestra\Messaging\Timer\PollingTimerProcessorOptions;
-use Morebec\Orkestra\Messaging\Timer\TimerStorageInterface;
+use Morebec\Orkestra\Messaging\Timeout\MessageBusTimeoutPublisher;
+use Morebec\Orkestra\Messaging\Timeout\PollingTimeoutProcessor;
+use Morebec\Orkestra\Messaging\Timeout\PollingTimeoutProcessorOptions;
+use Morebec\Orkestra\Messaging\Timeout\TimeoutStorageInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\SignalableCommandInterface;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,33 +15,33 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MainTimerProcessorConsoleCommand extends Command implements SignalableCommandInterface
 {
-    protected static $defaultName = 'orkestra:timer-processor';
+    protected static $defaultName = 'orkestra:timeout-processor';
     /**
-     * @var MessageBusTimerPublisher
+     * @var MessageBusTimeoutPublisher
      */
-    private $timerPublisher;
+    private $timeoutPublisher;
 
     /**
      * @var ClockInterface
      */
     private $clock;
     /**
-     * @var TimerStorageInterface
+     * @var TimeoutStorageInterface
      */
-    private $timerStorage;
+    private $timeoutStorage;
 
     /** @var SymfonyStyle */
     private $io;
 
     public function __construct(
-        MessageBusTimerPublisher $timerPublisher,
+        MessageBusTimeoutPublisher $timeoutPublisher,
         ClockInterface $clock,
-        TimerStorageInterface $timerStorage
+        TimeoutStorageInterface $timeoutStorage
     ) {
         parent::__construct();
-        $this->timerPublisher = $timerPublisher;
+        $this->timeoutPublisher = $timeoutPublisher;
         $this->clock = $clock;
-        $this->timerStorage = $timerStorage;
+        $this->timeoutStorage = $timeoutStorage;
     }
 
     public function getSubscribedSignals(): array
@@ -51,24 +51,24 @@ class MainTimerProcessorConsoleCommand extends Command implements SignalableComm
 
     public function handleSignal(int $signal): void
     {
-        $this->io->writeln('Timer Processor Stopping ...');
+        $this->io->writeln('Timeout Processor Stopping ...');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->io = new SymfonyStyle($input, $output);
 
-        $this->io->title('Timer Processor');
+        $this->io->title('Timeout Processor');
 
-        $options = new PollingTimerProcessorOptions();
+        $options = new PollingTimeoutProcessorOptions();
         $options->withName('main');
-        $options->withMaximumProcessingTime(PollingTimerProcessorOptions::INFINITE);
-        $processor = new PollingTimerProcessor($this->clock, $this->timerPublisher, $this->timerStorage, $options);
+        $options->withMaximumProcessingTime(PollingTimeoutProcessorOptions::INFINITE);
+        $processor = new PollingTimeoutProcessor($this->clock, $this->timeoutPublisher, $this->timeoutStorage, $options);
 
-        $this->io->writeln('Timer Processor Started.');
+        $this->io->writeln('Timeout Processor Started.');
         $processor->start();
 
-        $this->io->writeln('Timer Processor Stopped.');
+        $this->io->writeln('Timeout Processor Stopped.');
 
         return self::SUCCESS;
     }

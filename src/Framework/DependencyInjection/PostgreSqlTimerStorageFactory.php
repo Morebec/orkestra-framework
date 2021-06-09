@@ -5,8 +5,8 @@ namespace Morebec\Orkestra\OrkestraFramework\Framework\DependencyInjection;
 use Doctrine\DBAL\Connection;
 use Morebec\Orkestra\Messaging\Normalization\MessageNormalizerInterface;
 use Morebec\Orkestra\Normalization\ObjectNormalizerInterface;
-use Morebec\Orkestra\PostgreSqlTimerStorage\PostgreSqlTimerStorage;
-use Morebec\Orkestra\PostgreSqlTimerStorage\PostgreSqlTimerStorageConfiguration;
+use Morebec\Orkestra\PostgreSqlTimeoutStorage\PostgreSqlTimeoutStorage;
+use Morebec\Orkestra\PostgreSqlTimeoutStorage\PostgreSqlTimeoutStorageConfiguration;
 
 class PostgreSqlTimerStorageFactory
 {
@@ -30,11 +30,11 @@ class PostgreSqlTimerStorageFactory
         $this->connection = $connection;
     }
 
-    public function create(): PostgreSqlTimerStorage
+    public function create(): PostgreSqlTimeoutStorage
     {
-        $config = new PostgreSqlTimerStorageConfiguration();
+        $config = new PostgreSqlTimeoutStorageConfiguration();
         $config->connectionUrl = $_ENV['POSTGRESQL_URL'];
 
-        return new PostgreSqlTimerStorage($this->connection, $config, $this->messageNormalizer, $this->objectNormalizer);
+        return new PostgreSqlTimeoutStorage($this->connection, $config, $this->messageNormalizer, $this->objectNormalizer);
     }
 }

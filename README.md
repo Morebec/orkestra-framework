@@ -80,7 +80,7 @@ bin/ok help
 ````
 
 ## Console Commands
-The framework is shipped with console commands to operate the Projections, the Event Processor and the Timer Processor:
+The framework is shipped with console commands to operate the Projections, the Event Processor and the Timeout Processor:
 
 > These commands are supervised using supervisord to ensure they are always running and restarted in the event that they would fail.
 
@@ -119,10 +119,10 @@ bin/ok console orkestra:event-processor reset
 > Be advised that this command should not be used in production, and can have unexpected side effects.
 
 
-### Timer Processor
-To start the timer processor
+### Timeout Processor
+To start the timeout processor
 ```shell
-bin/ok console orkestra:timer-processor
+bin/ok console orkestra:timeout-processor
 ```
 
 ### Projection Processor
