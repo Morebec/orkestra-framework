@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class MainTimerProcessorConsoleCommand extends Command implements SignalableCommandInterface
+class MainTimeoutProcessorConsoleCommand extends Command implements SignalableCommandInterface
 {
     protected static $defaultName = 'orkestra:timeout-processor';
     /**

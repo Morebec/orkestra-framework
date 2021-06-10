@@ -8,7 +8,7 @@ use Morebec\Orkestra\Normalization\ObjectNormalizerInterface;
 use Morebec\Orkestra\PostgreSqlTimeoutStorage\PostgreSqlTimeoutStorage;
 use Morebec\Orkestra\PostgreSqlTimeoutStorage\PostgreSqlTimeoutStorageConfiguration;
 
-class PostgreSqlTimerStorageFactory
+class PostgreSqlTimeoutStorageFactory
 {
     /**
      * @var ObjectNormalizerInterface
