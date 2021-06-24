@@ -36,8 +36,8 @@ use Morebec\Orkestra\PostgreSqlTimeoutStorage\PostgreSqlTimeoutStorage;
 use Morebec\Orkestra\SymfonyBundle\Module\SymfonyOrkestraModuleConfiguratorInterface;
 use Morebec\Orkestra\SymfonyBundle\Module\SymfonyOrkestraModuleContainerConfigurator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorInterface
 {
@@ -135,9 +135,9 @@ class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorIn
     private function setupTimeoutProcessing(SymfonyOrkestraModuleContainerConfigurator $config): void
     {
         $config->service(TimeoutManagerInterface::class, TimeoutManager::class);
-        $config->service(PostgreSqlTimoutStorageFactory::class);
+        $config->service(PostgreSqlTimeoutStorageFactory::class);
         $config->service(TimeoutStorageInterface::class, PostgreSqlTimeoutStorage::class)
-            ->factory([service(PostgreSqlTimoutStorageFactory::class), 'create']);
+            ->factory([service(PostgreSqlTimeoutStorageFactory::class), 'create']);
         $config->service(MessageBusTimeoutPublisher::class);
         $config->consoleCommand(MainTimeoutProcessorConsoleCommand::class);
     }
