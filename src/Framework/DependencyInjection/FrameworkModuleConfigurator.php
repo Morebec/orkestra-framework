@@ -36,8 +36,8 @@ use Morebec\Orkestra\PostgreSqlTimeoutStorage\PostgreSqlTimeoutStorage;
 use Morebec\Orkestra\SymfonyBundle\Module\SymfonyOrkestraModuleConfiguratorInterface;
 use Morebec\Orkestra\SymfonyBundle\Module\SymfonyOrkestraModuleContainerConfigurator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 class FrameworkModuleConfigurator implements SymfonyOrkestraModuleConfiguratorInterface
 {
