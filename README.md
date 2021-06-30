@@ -28,15 +28,16 @@ Clone repository
 git clone https://github.com/Morebec/orkestra-framework
 ```
 
-Install composer dependencies
-```shell
-composer install
-```
-
-Start Docker containers
+Build & Start Docker containers
 ```shell
 bin/ok up
 ```
+
+Install composer dependencies
+```shell
+bin/ok composer install
+```
+> If asked, you can install the symfony recipes.
 
 Launch Quickstart utility
 ```shell
@@ -105,18 +106,21 @@ To continuously run the processor:
 ```shell
 bin/ok console orkestra:event-processor start
 ````
-
+> If using the docker containers, a supervisor is configured to ensure this is always running.
+> 
 To replay the events
 ```shell
 bin/ok console orkestra:event-processor replay
 ````
-> Be advised that this command should not be used in production, and can have unexpected side effects.
+> Be advised that this command should not be used in production, and can have unexpected side effects, since
+> events processed by the event processor are intended for write-side reactions.
 
 To reset the processor to the start of the stream:
 ```shell
 bin/ok console orkestra:event-processor reset
 ````
-> Be advised that this command should not be used in production, and can have unexpected side effects.
+> Be advised that this command should not be used in production, and can have unexpected side effects, since
+> events processed by the event processor are intended for write-side reactions.
 
 
 ### Timeout Processor
@@ -124,7 +128,8 @@ To start the timeout processor
 ```shell
 bin/ok console orkestra:timeout-processor
 ```
-
+> If using the docker containers, a supervisor is configured to ensure this is always running.
+> 
 ### Projection Processor
 To show the progress of the projection processor:
 ```shell
@@ -135,6 +140,7 @@ To continuously run the processor:
 ```shell
 bin/ok console orkestra:projection-processor start
 ````
+> If using the docker containers, a supervisor is configured to ensure this is always running.
 
 To replay the projections
 ```shell

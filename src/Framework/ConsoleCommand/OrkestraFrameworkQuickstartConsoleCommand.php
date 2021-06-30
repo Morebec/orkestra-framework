@@ -43,7 +43,7 @@ class OrkestraFrameworkQuickstartConsoleCommand extends Command
 
         $io->listing(['Initialize an empty git repo']);
         $io->listing(['Personalize the environment variables in <fg=yellow>.env.local</>']);
-        $io->listing(['Start the RoadRunner server with <fg=yellow>./bin/console orkestra:road-runner:start</>']);
+        $io->listing(['Start the RoadRunner server with <fg=yellow>./bin/console orkestra:road-runner:start</> (If you are using the docker containers, you can skip this step).']);
         $io->listing(['Read the documentation at https://github.com/Morebec/orkestra-framework']);
 
         return self::SUCCESS;
