@@ -39,12 +39,14 @@
     },
     "autoload": {
         "psr-4": {
-            "Morebec\\Orkestra\\OrkestraFramework\\Framework\\": "src/Framework"
+            "Morebec\\Orkestra\\OrkestraFramework\\Framework\\": "src/Framework",
+            "App\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\Morebec\\Orkestra\\OrkestraFramework\\Framework\\": "tests/Framework"
+            "Tests\\Morebec\\Orkestra\\OrkestraFramework\\Framework\\": "tests/Framework",
+            "Tests\\App\\": "tests"
         }
     },
     "scripts": {

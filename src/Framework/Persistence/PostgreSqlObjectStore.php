@@ -3,6 +3,7 @@
 namespace Morebec\Orkestra\OrkestraFramework\Framework\Persistence;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Morebec\Orkestra\Normalization\ObjectNormalizerInterface;
 use Morebec\Orkestra\PostgreSqlDocumentStore\Filter\Filter;
 use Morebec\Orkestra\PostgreSqlDocumentStore\PostgreSqlDocumentStore;
@@ -42,27 +43,54 @@ class PostgreSqlObjectStore
         $this->normalizer = $normalizer;
     }
 
-    public function addObject(string $id, $o): void
+    /**
+     * Adds an object to this store.
+     *
+     * @throws Exception
+     */
+    public function addObject(string $id, object $o): void
     {
         $this->store->insertDocument($this->collectionName, $id, $this->normalizer->normalize($o));
     }
 
-    public function updateObject(string $id, $o): void
+    /**
+     * Updates an object in this store.
+     *
+     * @throws Exception
+     */
+    public function updateObject(string $id, object $o): void
     {
         $this->store->updateDocument($this->collectionName, $id, $this->normalizer->normalize($o));
     }
 
+    /**
+     * Removes an object from this store.
+     */
     public function removeObject(string $id): void
     {
         $this->store->removeDocument($this->collectionName, $id);
     }
 
-    public function findById(string $id)
+    /**
+     * Finds an Object by its ID or returns null if not found.
+     *
+     * @return null
+     *
+     * @throws Exception
+     */
+    public function findById(string $id): ?object
     {
         return $this->findOneBy(Filter::findById($id));
     }
 
-    public function findOneBy(string $filter)
+    /**
+     * Finds an Object by a given filter or returns null if not found.
+     *
+     * @param string|Filter $filter
+     *
+     * @throws Exception
+     */
+    public function findOneBy($filter): ?object
     {
         $doc = $this->store->findOneDocument($this->collectionName, $filter);
         if (!$doc) {
@@ -72,30 +100,53 @@ class PostgreSqlObjectStore
         return $this->denormalizeObject($doc);
     }
 
-    public function findManyBy(string $filter): array
+    /**
+     * Finds many objects by a given filter.
+     *
+     * @param string|Filter $filter
+     *
+     * @throws Exception
+     */
+    public function findManyBy($filter): array
     {
         $docs = $this->store->findManyDocuments($this->collectionName, $filter);
 
         return array_map([$this, 'denormalizeObject'], $docs);
     }
 
-    public function clear()
+    /**
+     * Empties the collection containing the objects.
+     *
+     * @throws Exception
+     */
+    public function clear(): void
     {
         $this->store->dropCollection($this->collectionName);
     }
 
+    /**
+     * Returns the Doctrine DBAL connection.
+     */
     public function getConnection(): Connection
     {
         return $this->store->getConnection();
     }
 
-    protected function normalizeObject($object): array
+    /**
+     * Normalizes an object before adding or updating it in the store.
+     */
+    protected function normalizeObject(object $object): array
     {
         return $this->normalizer->normalize($object);
     }
 
-    protected function denormalizeObject($object)
+    /**
+     * Denormalizes an object upon reads.
+     *
+     * @param mixed $objectData
+     */
+    protected function denormalizeObject($objectData): ?object
     {
-        return $this->normalizer->denormalize($object, $this->objectClassName);
+        return $this->normalizer->denormalize($objectData, $this->objectClassName);
     }
 }

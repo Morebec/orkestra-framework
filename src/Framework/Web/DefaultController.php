@@ -14,6 +14,6 @@ class DefaultController extends AbstractController
      */
     public function __invoke(Request $request): Response
     {
-        return $this->json(['hello' => uniqid('world_')]);
+        return $this->json(['hello' => uniqid('world_', true)]);
     }
 }

@@ -2,21 +2,24 @@ version: '3.7'
 services:
     php:
         build:
+            dockerfile: ./docker/php-debug/Dockerfile
             context: .
-            target: php_dev
         restart: always
         ports:
-            - 9090:9090
+            - 9090:9090 # Web Server exposed port
+            - 9095:9095 # Supervisord control panel
 
         volumes:
-            # Monorepo
             - ./:/srv/app/
+            - ./docker/supervisor.ini:/etc/supervisor.d/supervisor.ini:rw
 
             # Mount ssh keys
             - ~/.ssh/:/root/.ssh/
 
             # PHP Ini config
-            - ./docker/php-fpm/conf.d:/usr/local/etc/php/conf.d:rw
+            # - ./docker/php-debug/:/etc/php/7.4/cli/conf.d:rw
+        depends_on:
+            -   postgresql
 
     postgresql:
         image: 'docker.io/bitnami/postgresql:11-debian-10'
@@ -26,6 +29,13 @@ services:
             - orkestra_postgresql_data:/bitnami/postgresql
         environment:
             - 'ALLOW_EMPTY_PASSWORD=yes'
+
+    mailhog:
+        image: mailhog/mailhog
+        restart: always
+        ports:
+            - 1025:1025
+            - 8025:8025
 
 volumes:
     orkestra_postgresql_data:
