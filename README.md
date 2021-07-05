@@ -19,7 +19,7 @@ It is essentially an opinionated distribution of the Orkestra components on top 
   - Microservices
   - Backend Systems
   - CLI Apps
-- Modern: PHP 7.3+
+- Modern: PHP 7.4+
 - Docker + docker-compose setup
 
 ## Installation
