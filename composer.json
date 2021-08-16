@@ -26,9 +26,10 @@
         "symfony/framework-bundle": "5.2.*",
         "symfony/http-client": "5.2.*",
         "symfony/yaml": "5.2.*",
-        "baldinof/roadrunner-bundle": "^2.0",
-        "symfony/monolog-bundle": "^3.7",
         "symfony/process": "5.2.*"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
     },
     "config": {
         "optimize-autoloader": true,
@@ -39,14 +40,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Morebec\\Orkestra\\OrkestraFramework\\Framework\\": "src/Framework",
-            "App\\": "src"
+            "Morebec\\Orkestra\\Framework\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\Morebec\\Orkestra\\OrkestraFramework\\Framework\\": "tests/Framework",
-            "Tests\\App\\": "tests"
+            "Tests\\Morebec\\Orkestra\\Framework\\": "tests/"
         }
     },
     "scripts": {
