@@ -32,6 +32,8 @@ class PostgreSqlObjectStore
         $this->collectionName = $collectionName;
         $this->objectClassName = $className;
         $this->normalizer = $normalizer;
+
+        $this->store->createCollectionIfNotExists($collectionName);
     }
 
     /**
@@ -123,6 +125,7 @@ class PostgreSqlObjectStore
     public function clear(): void
     {
         $this->store->dropCollection($this->collectionName);
+        $this->store->createCollectionIfNotExists($this->collectionName);
     }
 
     /**

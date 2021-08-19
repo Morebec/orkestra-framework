@@ -10,7 +10,6 @@ use Morebec\Orkestra\Messaging\MessageHeaders;
 use Morebec\Orkestra\Messaging\MessageInterface;
 use Morebec\Orkestra\Messaging\Normalization\MessageNormalizerInterface;
 use ReflectionClass;
-use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -108,8 +107,6 @@ class CqrsController extends AbstractController
 
     /**
      * Builds a {@link JsonResponse} from a {@link MessageBusResponseInterface}.
-     *
-     * @throws ReflectionException
      */
     protected function handleFailureMessageBusResponse(MessageBusResponseInterface $response, array $exceptionStatusCodeMapping = [], array $httpHeaders = []): JsonResponse
     {
@@ -118,6 +115,7 @@ class CqrsController extends AbstractController
         }
 
         $error = $response->getPayload();
+        /** @noinspection PhpUnhandledExceptionInspection */
         $errorType = (new ReflectionClass($error))->getShortName();
 
         $statusCode = ($exceptionStatusCodeMapping + [
