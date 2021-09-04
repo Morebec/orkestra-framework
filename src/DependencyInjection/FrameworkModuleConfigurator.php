@@ -11,7 +11,9 @@ use Morebec\Orkestra\Framework\Api\ApiRequestListener;
 use Morebec\Orkestra\Framework\Api\HttpLoggerListener;
 use Morebec\Orkestra\Framework\ConsoleCommand\StartRoadRunnerConsoleCommand;
 use Morebec\Orkestra\Framework\EventStore\GitHashEventStoreDecorator;
+use Morebec\Orkestra\Framework\Messaging\MessageAuditEventStorageInterface;
 use Morebec\Orkestra\Framework\Messaging\MessageAuditMiddleware;
+use Morebec\Orkestra\Framework\Messaging\PostgreSqlMessageAuditEventStorage;
 use Morebec\Orkestra\Messaging\Context\BuildMessageBusContextMiddleware;
 use Morebec\Orkestra\Messaging\Context\MessageBusContextManager;
 use Morebec\Orkestra\Messaging\Context\MessageBusContextManagerInterface;
@@ -113,6 +115,7 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
                 ->withMiddleware(LoggerMiddleware::class)
                 ->withMiddlewareAfter(MessageAuditMiddleware::class, LoggerMiddleware::class);
 
+        $configuration->service(MessageAuditEventStorageInterface::class, PostgreSqlMessageAuditEventStorage::class);
         $configuration->service(LoggingMessageHandlerInterceptor::class)
             ->tag('monolog.logger', ['channel' => 'message_bus'])
         ;
