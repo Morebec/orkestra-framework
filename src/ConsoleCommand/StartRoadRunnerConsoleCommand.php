@@ -81,7 +81,11 @@ class StartRoadRunnerConsoleCommand extends Command implements SignalableCommand
                 return;
             }
 
-            $message = "[{$output['T']}][{$output['N']}]: {$output['M']}";
+            $timeStamp = $output['T'];
+            $message = $output['M'];
+            $n = "[" . ($output['N'] ?? null) . "]";
+
+            $message = "[{$timeStamp}]{$n}: {$message}";
             $logLevel = $output['L'];
 
             if ($logLevel === 'DEBUG' && $allowDebug) {
@@ -123,12 +127,12 @@ class StartRoadRunnerConsoleCommand extends Command implements SignalableCommand
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
         $this->io->title('Road Runner');
 
-        // First ensure road runner has been downloaded and is available.
+        // First ensure road-runner has been downloaded and is available.
         $this->ensureRoadRunnerBinaryDownloaded();
 
         $configuration = $this->loadConfiguration($input);
@@ -163,7 +167,7 @@ class StartRoadRunnerConsoleCommand extends Command implements SignalableCommand
 
         $this->io->writeln('Server stopped ...');
 
-        return $process->getExitCode();
+        return $process->getExitCode() ?? self::SUCCESS;
     }
 
     private function ensureRoadRunnerBinaryDownloaded(): void
