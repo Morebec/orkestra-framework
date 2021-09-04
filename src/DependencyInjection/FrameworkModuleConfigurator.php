@@ -98,15 +98,16 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
         $configuration->service(MessageBusContextManagerInterface::class, MessageBusContextManager::class);
 
         try {
-            $messageBus = $configuration->messaging();
+            $messageBus = $configuration->messaging()->messageBus(MessageBusInterface::class);
         } catch (NotConfiguredException $exception) {
             $messageBus = new MessageBusConfiguration();
+            $messageBus->usingServiceId(MessageBusInterface::class);
             $configuration
                 ->messaging()
                 ->configureMessageBus($messageBus);
         }
 
-        $messageBus->usingServiceId(MessageBusInterface::class)
+        $messageBus
                 ->withMiddleware(BuildMessageBusContextMiddleware::class)
                 ->withMiddleware(LoggerMiddleware::class)
                 ->withMiddlewareAfter(MessageAuditMiddleware::class, LoggerMiddleware::class);
