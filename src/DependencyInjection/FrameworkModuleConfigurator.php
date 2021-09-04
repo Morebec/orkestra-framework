@@ -12,6 +12,7 @@ use Morebec\Orkestra\Framework\Api\HttpLoggerListener;
 use Morebec\Orkestra\Framework\ConsoleCommand\StartRoadRunnerConsoleCommand;
 use Morebec\Orkestra\Framework\EventStore\GitHashEventStoreDecorator;
 use Morebec\Orkestra\Framework\Messaging\MessageAuditMiddleware;
+use Morebec\Orkestra\Messaging\Context\BuildMessageBusContextMiddleware;
 use Morebec\Orkestra\Messaging\Context\MessageBusContextManager;
 use Morebec\Orkestra\Messaging\Context\MessageBusContextManagerInterface;
 use Morebec\Orkestra\Messaging\Context\MessageBusContextProvider;
@@ -37,6 +38,7 @@ use Morebec\Orkestra\SymfonyBundle\DependencyInjection\Configuration\EventStore\
 use Morebec\Orkestra\SymfonyBundle\DependencyInjection\Configuration\Messaging\MessageBusConfiguration;
 use Morebec\Orkestra\SymfonyBundle\DependencyInjection\Configuration\Messaging\MessagingConfiguration;
 use Morebec\Orkestra\SymfonyBundle\DependencyInjection\Configuration\Messaging\TimeoutProcessingConfiguration;
+use Morebec\Orkestra\SymfonyBundle\DependencyInjection\Configuration\NotConfiguredException;
 use Morebec\Orkestra\SymfonyBundle\DependencyInjection\Configuration\OrkestraConfiguration;
 use Morebec\Orkestra\SymfonyBundle\DependencyInjection\Configuration\OrkestraModuleConfiguratorInterface;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -95,13 +97,19 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
         $configuration->service(MessageBusContextProviderInterface::class, MessageBusContextProvider::class);
         $configuration->service(MessageBusContextManagerInterface::class, MessageBusContextManager::class);
 
-        $configuration
-            ->messaging()
-            ->configureMessageBus(
-                (new MessageBusConfiguration())
-                    ->usingServiceId(MessageBusInterface::class)
-                    ->withMiddlewareAfter(MessageAuditMiddleware::class, LoggerMiddleware::class)
-        );
+        try {
+            $messageBus = $configuration->messaging();
+        } catch (NotConfiguredException $exception) {
+            $messageBus = new MessageBusConfiguration();
+            $configuration
+                ->messaging()
+                ->configureMessageBus($messageBus);
+        }
+
+        $messageBus->usingServiceId(MessageBusInterface::class)
+                ->withMiddleware(BuildMessageBusContextMiddleware::class)
+                ->withMiddleware(LoggerMiddleware::class)
+                ->withMiddlewareAfter(MessageAuditMiddleware::class, LoggerMiddleware::class);
 
         $configuration->service(LoggingMessageHandlerInterceptor::class)
             ->tag('monolog.logger', ['channel' => 'message_bus'])
