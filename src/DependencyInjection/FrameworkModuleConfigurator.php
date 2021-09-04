@@ -11,6 +11,7 @@ use Morebec\Orkestra\Framework\Api\ApiRequestListener;
 use Morebec\Orkestra\Framework\Api\HttpLoggerListener;
 use Morebec\Orkestra\Framework\ConsoleCommand\StartRoadRunnerConsoleCommand;
 use Morebec\Orkestra\Framework\EventStore\GitHashEventStoreDecorator;
+use Morebec\Orkestra\Framework\EventStore\GitWrapper;
 use Morebec\Orkestra\Framework\Messaging\MessageAuditEventStorageInterface;
 use Morebec\Orkestra\Framework\Messaging\MessageAuditMiddleware;
 use Morebec\Orkestra\Framework\Messaging\PostgreSqlMessageAuditEventStorage;
@@ -146,6 +147,8 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
                 ->decoratedBy(UpcastingEventStoreDecorator::class)
                 ->decoratedBy(MessageBusContextEventStoreDecorator::class)
         );
+
+        $configuration->service(GitWrapper::class);
 
         if (getenv('APP_ENV') === 'test') {
             $configuration->configureEventStore(
