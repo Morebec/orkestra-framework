@@ -78,7 +78,8 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
         $configuration->service(ObjectNormalizerInterface::class, ObjectNormalizer::class);
 
         // Road Runner Commands
-        $configuration->consoleCommand(StartRoadRunnerConsoleCommand::class);
+        $configuration->consoleCommand(StartRoadRunnerConsoleCommand::class)
+        ->arg(0, '%kernel.project_dir%/');
 
         // General Logging of HTTP
         $configuration->service(HttpLoggerListener::class)
