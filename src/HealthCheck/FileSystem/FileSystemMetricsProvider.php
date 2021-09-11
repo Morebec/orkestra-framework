@@ -43,7 +43,7 @@ class FileSystemMetricsProvider implements FileSystemMetricProviderInterface
      */
     public function getUsedSpaceAsPercentage(): float
     {
-        return round($this->getUsedSpace() / $this->getTotalSpace(), 2);
+        return round($this->getUsedSpace() / $this->getTotalSpace(), 4);
     }
 
     /**
@@ -61,7 +61,7 @@ class FileSystemMetricsProvider implements FileSystemMetricProviderInterface
 
     public function getFreeSpaceAsPercentage(): float
     {
-        return round($this->getFreeSpace() / $this->getTotalSpace(), 2);
+        return round($this->getFreeSpace() / $this->getTotalSpace(), 4);
     }
 
     protected function createFileSystemException(): RuntimeException
