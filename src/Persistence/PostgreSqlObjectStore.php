@@ -114,7 +114,9 @@ class PostgreSqlObjectStore
      */
     public function findAll(): array
     {
-        return $this->store->findAllDocuments($this->collectionName);
+        $docs = $this->store->findAllDocuments($this->collectionName);
+
+        return array_map([$this, 'denormalizeObject'], $docs);
     }
 
     /**
