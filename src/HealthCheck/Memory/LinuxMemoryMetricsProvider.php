@@ -34,7 +34,7 @@ class LinuxMemoryMetricsProvider implements MemoryMetricsProviderInterface
     {
         $data = $this->readProcMemFile();
 
-        return ($data['MemTotal'] - $data['MemFree']) / $data['MemTotal'];
+        return round(($data['MemTotal'] - $data['MemFree']) / $data['MemTotal'], 2);
     }
 
     /**
@@ -54,7 +54,7 @@ class LinuxMemoryMetricsProvider implements MemoryMetricsProviderInterface
     {
         $data = $this->readProcMemFile();
 
-        return $data['MemFree'] / $data['MemTotal'];
+        return round($data['MemFree'] / $data['MemTotal'], 2);
     }
 
     /**

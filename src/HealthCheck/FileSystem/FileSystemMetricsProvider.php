@@ -22,7 +22,7 @@ class FileSystemMetricsProvider implements FileSystemMetricProviderInterface
      */
     public function getTotalSpace(): int
     {
-        $totalSpace = disk_free_space($this->fileSystemDirectory);
+        $totalSpace = disk_total_space($this->fileSystemDirectory);
         if ($totalSpace === false) {
             throw $this->createFileSystemException();
         }
@@ -43,7 +43,7 @@ class FileSystemMetricsProvider implements FileSystemMetricProviderInterface
      */
     public function getUsedSpaceAsPercentage(): float
     {
-        return $this->getUsedSpace() / $this->getTotalSpace();
+        return round($this->getUsedSpace() / $this->getTotalSpace(), 2);
     }
 
     /**
@@ -61,7 +61,7 @@ class FileSystemMetricsProvider implements FileSystemMetricProviderInterface
 
     public function getFreeSpaceAsPercentage(): float
     {
-        return $this->getFreeSpace() / $this->getTotalSpace();
+        return round($this->getFreeSpace() / $this->getTotalSpace(), 2);
     }
 
     protected function createFileSystemException(): RuntimeException
