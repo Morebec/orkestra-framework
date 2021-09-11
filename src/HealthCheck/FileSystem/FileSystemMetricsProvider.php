@@ -18,7 +18,7 @@ class FileSystemMetricsProvider implements FileSystemMetricProviderInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getTotalSpace(): int
     {
@@ -31,7 +31,7 @@ class FileSystemMetricsProvider implements FileSystemMetricProviderInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getUsedSpace(): int
     {
@@ -39,7 +39,7 @@ class FileSystemMetricsProvider implements FileSystemMetricProviderInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getUsedSpaceAsPercentage(): float
     {
@@ -47,7 +47,7 @@ class FileSystemMetricsProvider implements FileSystemMetricProviderInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getFreeSpace(): int
     {
@@ -59,16 +59,13 @@ class FileSystemMetricsProvider implements FileSystemMetricProviderInterface
         return (int) $freeSpace;
     }
 
-    /**
-     * @return RuntimeException
-     */
-    protected function createFileSystemException(): RuntimeException
-    {
-        return new RuntimeException('Could not calculate space of file system for directory ' . $this->fileSystemDirectory);
-    }
-
     public function getFreeSpaceAsPercentage(): float
     {
         return $this->getFreeSpace() / $this->getTotalSpace();
+    }
+
+    protected function createFileSystemException(): RuntimeException
+    {
+        return new RuntimeException('Could not calculate space of file system for directory '.$this->fileSystemDirectory);
     }
 }

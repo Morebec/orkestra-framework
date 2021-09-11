@@ -83,7 +83,7 @@ class StartRoadRunnerConsoleCommand extends Command implements SignalableCommand
 
             $timeStamp = $output['T'];
             $message = $output['M'];
-            $n = "[" . ($output['N'] ?? null) . "]";
+            $n = '['.($output['N'] ?? null).']';
 
             $message = "[{$timeStamp}]{$n}: {$message}";
             $logLevel = $output['L'];

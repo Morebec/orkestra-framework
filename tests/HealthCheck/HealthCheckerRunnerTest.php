@@ -14,7 +14,7 @@ class HealthCheckerRunnerTest extends TestCase
     {
         $runner = new HealthCheckerRunner(new SystemClock(), [
             new FileSystemHealthChecker(),
-            new MemoryHealthChecker()
+            new MemoryHealthChecker(),
         ]);
 
         $result = $runner->run();

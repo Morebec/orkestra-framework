@@ -21,12 +21,14 @@ class HealthCheckerRunnerResult
     public function addHealthCheck(string $healthCheckerName, Health $health): self
     {
         $this->healthChecks[$healthCheckerName] = $health;
+
         return $this;
     }
 
     public function addContextData(string $key, $value): self
     {
         $this->contextData[$key] = $value;
+
         return $this;
     }
 

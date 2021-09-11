@@ -20,8 +20,7 @@ class FileSystemHealthChecker implements HealthCheckerInterface
         ?FileSystemMetricProviderInterface $fileSystemMetricProvider = null,
         float $downThreshold = 0.1,
         float $degradationThreshold = 0.2
-    )
-    {
+    ) {
         $this->metricsProvider = $fileSystemMetricProvider ?: new FileSystemMetricsProvider(__DIR__);
         $this->downThreshold = $downThreshold;
         $this->degradationThreshold = $degradationThreshold;

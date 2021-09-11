@@ -4,7 +4,6 @@ namespace Morebec\Orkestra\Framework\HealthCheck;
 
 use DateTimeInterface;
 use Morebec\Orkestra\DateTime\ClockInterface;
-use Morebec\Orkestra\DateTime\DateTime;
 
 /**
  * Default implementation of a {@link HealthCheckerRunnerInterface} that receives a list of {@link HealthCheckerInterface}
@@ -48,7 +47,8 @@ class HealthCheckerRunner implements HealthCheckerRunnerInterface
 
         $result->addContextData('date', $startedAt->format(DateTimeInterface::RFC3339_EXTENDED));
         $result->addContextData('durationMs', $durationInMs);
-        $result->addContextData('nbChecks', count($result->getHealthChecks()));
+        $result->addContextData('nbChecks', \count($result->getHealthChecks()));
+
         return $result;
     }
 

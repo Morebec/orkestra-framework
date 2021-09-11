@@ -3,14 +3,12 @@
 namespace Tests\Morebec\Orkestra\Framework\HealthCheck\FileSystem;
 
 use Morebec\Orkestra\Framework\HealthCheck\FileSystem\FileSystemHealthChecker;
-use Morebec\Orkestra\Framework\HealthCheck\FileSystem\FileSystemMetricsProvider;
 use Morebec\Orkestra\Framework\HealthCheck\FileSystem\FileSystemMetricProviderInterface;
 use Morebec\Orkestra\Framework\HealthCheck\HealthStatus;
 use PHPUnit\Framework\TestCase;
 
 class FileSystemHealthCheckerTest extends TestCase
 {
-
     public function testCheck(): void
     {
         // TEST UP
@@ -52,6 +50,5 @@ class FileSystemHealthCheckerTest extends TestCase
         $result = $checker->check();
 
         self::assertTrue($result->hasStatus(HealthStatus::DOWN()));
-
     }
 }
