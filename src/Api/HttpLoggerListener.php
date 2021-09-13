@@ -57,7 +57,7 @@ class HttpLoggerListener implements EventSubscriberInterface
         $response = $event->getResponse();
 
         $requestStartedAt = $request->attributes->get(self::REQUEST_STARTED_AT_ATTRIBUTE);
-        $requestDuration = ($requestStartedAt / 1000) - $this->clock->now()->getMillisTimestamp();
+        $requestDuration = $this->clock->now()->getMillisTimestamp() - ($requestStartedAt / 1000);
 
         $request->attributes->set(self::REQUEST_DURATION_ATTRIBUTE, $requestDuration);
 
