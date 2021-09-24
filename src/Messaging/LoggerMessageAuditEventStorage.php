@@ -2,6 +2,7 @@
 
 namespace Morebec\Orkestra\Framework\Messaging;
 
+use Morebec\Orkestra\DateTime\DateTime;
 use Psr\Log\LoggerInterface;
 
 class LoggerMessageAuditEventStorage implements MessageAuditEventStorageInterface
@@ -15,9 +16,11 @@ class LoggerMessageAuditEventStorage implements MessageAuditEventStorageInterfac
 
     public function add(MessageAuditEvent $event): void
     {
+        $context = (array) $event;
+        $context['occurredAt'] = $event->occurredAt->format(DateTime::RFC3339_EXTENDED);
         $this->logger->info(
-            "[MessageAudit][corrId:{$event->correlationId}][causId:{$event->causationId}][msgId:{$event->messageId}]: {$event->type}",
-            (array) $event
+            'Message Audit: {type} {messageTypeName}',
+            $context
         );
     }
 }
