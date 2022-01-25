@@ -150,15 +150,6 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
 
         $configuration->service(GitWrapper::class);
 
-        if (getenv('APP_ENV') === 'test') {
-            $configuration->configureEventStore(
-                (new EventStoreConfiguration())
-                    ->usingInMemoryImplementation()
-                    ->decoratedBy(UpcastingEventStoreDecorator::class)
-                    ->decoratedBy(MessageBusContextEventStoreDecorator::class)
-            );
-        }
-
         $this->configureApi($configuration);
     }
 
