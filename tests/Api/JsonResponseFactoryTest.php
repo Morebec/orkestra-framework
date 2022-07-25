@@ -24,7 +24,7 @@ class JsonResponseFactoryTest extends TestCase
         self::assertEquals('{"status":"failure","error":"UnexpectedError","message":"An unexpected error occurred","data":null}', $response->getContent());
         self::assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
         self::assertTrue($response->headers->has('X-Unit-Test'));
-        self::assertTrue($response->headers->get('X-Unit-Test'));
+        self::assertEquals(1, $response->headers->get('X-Unit-Test'));
     }
 
     public function testMakeSuccessResponse(): void
@@ -35,6 +35,6 @@ class JsonResponseFactoryTest extends TestCase
         self::assertEquals('{"status":"success","data":{"key":"value"}}', $response->getContent());
         self::assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
         self::assertTrue($response->headers->has('X-Unit-Test'));
-        self::assertTrue($response->headers->get('X-Unit-Test'));
+        self::assertEquals(1, $response->headers->get('X-Unit-Test'));
     }
 }

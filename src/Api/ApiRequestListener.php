@@ -52,11 +52,8 @@ class ApiRequestListener implements EventSubscriberInterface
 
         try {
             $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
-            if (!$data) {
-                throw new JsonException('Invalid JSON received');
-            }
         } catch (JsonException $e) {
-            throw new InvalidApiRequestException('Invalid JSON received.');
+            throw new InvalidApiRequestException("Could not decode JSON request: Invalid JSON receive: {$e->getMessage()}");
         }
 
         $request->request->replace($data);
