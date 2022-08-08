@@ -53,6 +53,9 @@ class ConnectionFactory
             $this->logger->info('Database connection established.');
         }
 
+        // explicitly auto commit
+        $connection->setAutoCommit(true);
+
         return $connection;
     }
 }
