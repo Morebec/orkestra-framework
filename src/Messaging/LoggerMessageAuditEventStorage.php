@@ -19,7 +19,7 @@ class LoggerMessageAuditEventStorage implements MessageAuditEventStorageInterfac
         $context = (array) $event;
         $context['occurredAt'] = $event->occurredAt->format(DateTime::RFC3339_EXTENDED);
 
-        if ($event->type === MessageAuditEvent::MESSAGE_PROCESSED_TYPE && $context["messageHeaders"]["response"]["failed"]) {
+        if ($event->type === MessageAuditEvent::MESSAGE_PROCESSED_TYPE && $context['messageHeaders']['response']['failed']) {
             $this->logger->error(
                 'Message Audit: {type} {messageTypeName}',
                 $context
