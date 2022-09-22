@@ -57,13 +57,14 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
         $configuration
             ->usingSystemClock();
 
-        $configuration->service(ConnectionFactory::class);
-        $configuration->service(Connection::class)
-            ->factory([service(ConnectionFactory::class), 'create'])
-        ;
+        // DATABASE CONNECTION
+        $this->configureConnection($configuration);
 
         // MESSAGING
         $this->configureMessaging($configuration);
+
+        // TIMEOUT PROCESSING
+        $this->configureTimeoutProcessing($configuration);
 
         // EVENT STORE
         $this->configureEventStore($configuration);
@@ -72,10 +73,10 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
         $this->configureEventProcessing($configuration);
 
         // HTTP API
-        $this->configureHttpApi($configuration);
+        $this->configureHttp($configuration);
 
-        $configuration->consoleCommand(DebugMessageClassMapConsoleCommand::class);
-        // $configuration->consoleCommand(DebugMessageRouterConsoleCommand::class);
+        // Debugging console commands
+        $this->configureDebugConsoleCommands($configuration);
 
         // General Storage
         $configuration->service(PostgreSqlDocumentStoreConfiguration::class)->factory(
@@ -85,16 +86,17 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
 
         // Object Normalization
         $configuration->service(ObjectNormalizerInterface::class, ObjectNormalizer::class);
-
-        // Road Runner Commands
-        $configuration->consoleCommand(StartRoadRunnerConsoleCommand::class)
-        ->arg(0, '%kernel.project_dir%/');
     }
 
     public function configureRoutes(RoutingConfigurator $routes): void
     {
     }
 
+    /**
+     * Configures the message bus.
+     * @param OrkestraConfiguration $configuration
+     * @return void
+     */
     protected function configureMessaging(OrkestraConfiguration $configuration): void
     {
         $configuration->configureMessaging((new MessagingConfiguration()));
@@ -121,21 +123,13 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
         $configuration->service(LoggingMessageHandlerInterceptor::class)
             ->tag('monolog.logger', ['channel' => 'message_bus'])
         ;
-
-        // Timeout processing
-        $configuration->messaging()->configureTimeoutProcessing(
-            (new TimeoutProcessingConfiguration())
-                ->usingDefaultManagerImplementation()
-                ->usingStorageImplementation(PostgreSqlTimeoutStorage::class)
-        );
-
-        $configuration->service(PostgreSqlTimeoutStorageFactory::class);
-        $configuration->service(TimeoutStorageInterface::class, PostgreSqlTimeoutStorage::class)
-            ->factory([service(PostgreSqlTimeoutStorageFactory::class), 'create']);
-
-        $configuration->service(MessageBusTimeoutPublisher::class);
     }
 
+    /**
+     * Configures the event store.
+     * @param OrkestraConfiguration $configuration
+     * @return void
+     */
     protected function configureEventStore(OrkestraConfiguration $configuration): void
     {
         $configuration->service(PostgreSqlEventStoreConfiguration::class)
@@ -152,6 +146,11 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
         $configuration->service(GitWrapper::class);
     }
 
+    /**
+     * Configures event processing services, such as position storage, event publisher.
+     * @param OrkestraConfiguration $configuration
+     * @return void
+     */
     protected function configureEventProcessing(OrkestraConfiguration $configuration): void
     {
         $configuration
@@ -170,9 +169,61 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
         $configuration->service(MessageBusEventPublisher::class);
     }
 
-    private function configureHttpApi(OrkestraConfiguration $configuration): void
+    /**
+     * Configures the HTTP related services.
+     * @param OrkestraConfiguration $configuration
+     * @return void
+     */
+    private function configureHttp(OrkestraConfiguration $configuration): void
     {
         $configuration->service(ApiRequestListener::class);
         $configuration->service(ApiExceptionListener::class);
+
+        // Road Runner Commands
+        $configuration->consoleCommand(StartRoadRunnerConsoleCommand::class)
+            ->arg(0, '%kernel.project_dir%/');
+    }
+
+    /**
+     * Configures the database connection.
+     * @param OrkestraConfiguration $configuration
+     * @return void
+     */
+    protected function configureConnection(OrkestraConfiguration $configuration): void
+    {
+        $configuration->service(ConnectionFactory::class);
+        $configuration->service(Connection::class)
+            ->factory([service(ConnectionFactory::class), 'create']);
+    }
+
+    /**
+     * Configures the service requirements for timeout processing.
+     * @param OrkestraConfiguration $configuration
+     * @return void
+     */
+    protected function configureTimeoutProcessing(OrkestraConfiguration $configuration): void
+    {
+        $configuration->messaging()->configureTimeoutProcessing(
+            (new TimeoutProcessingConfiguration())
+                ->usingDefaultManagerImplementation()
+                ->usingStorageImplementation(PostgreSqlTimeoutStorage::class)
+        );
+
+        $configuration->service(PostgreSqlTimeoutStorageFactory::class);
+        $configuration->service(TimeoutStorageInterface::class, PostgreSqlTimeoutStorage::class)
+            ->factory([service(PostgreSqlTimeoutStorageFactory::class), 'create']);
+
+        $configuration->service(MessageBusTimeoutPublisher::class);
+    }
+
+    /**
+     * Configures some debugging console commands.
+     * @param OrkestraConfiguration $configuration
+     * @return void
+     */
+    protected function configureDebugConsoleCommands(OrkestraConfiguration $configuration): void
+    {
+        $configuration->consoleCommand(DebugMessageClassMapConsoleCommand::class);
+        // $configuration->consoleCommand(DebugMessageRouterConsoleCommand::class);
     }
 }
