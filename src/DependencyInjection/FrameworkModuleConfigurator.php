@@ -9,6 +9,9 @@ use Morebec\Orkestra\EventSourcing\EventStore\UpcastingEventStoreDecorator;
 use Morebec\Orkestra\Framework\Api\ApiExceptionListener;
 use Morebec\Orkestra\Framework\Api\ApiRequestListener;
 use Morebec\Orkestra\Framework\Api\HttpLoggerListener;
+use Morebec\Orkestra\Framework\Api\HttpObjectNormalizer;
+use Morebec\Orkestra\Framework\Api\HttpObjectNormalizerInterface;
+use Morebec\Orkestra\Framework\Api\JsonResponseFactory;
 use Morebec\Orkestra\Framework\ConsoleCommand\StartRoadRunnerConsoleCommand;
 use Morebec\Orkestra\Framework\EventStore\GitHashEventStoreDecorator;
 use Morebec\Orkestra\Framework\EventStore\GitWrapper;
@@ -178,6 +181,9 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
     {
         $configuration->service(ApiRequestListener::class);
         $configuration->service(ApiExceptionListener::class);
+
+        $configuration->service(JsonResponseFactory::class);
+        $configuration->service(HttpObjectNormalizerInterface::class, HttpObjectNormalizer::class);
 
         // Road Runner Commands
         $configuration->consoleCommand(StartRoadRunnerConsoleCommand::class)
