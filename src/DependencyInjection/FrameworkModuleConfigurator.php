@@ -89,11 +89,6 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
         // Road Runner Commands
         $configuration->consoleCommand(StartRoadRunnerConsoleCommand::class)
         ->arg(0, '%kernel.project_dir%/');
-
-        // General Logging of HTTP
-        $configuration->service(HttpLoggerListener::class)
-            ->tag('monolog.logger', ['channel' => 'http'])
-        ;
     }
 
     public function configureRoutes(RoutingConfigurator $routes): void
