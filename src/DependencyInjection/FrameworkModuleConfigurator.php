@@ -47,6 +47,9 @@ use Morebec\Orkestra\SymfonyBundle\DependencyInjection\Configuration\OrkestraMod
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
+/**
+ * Is a module configurator that can serve as a base of example to wire the orkestra services.
+ */
 class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
 {
     public function configureContainer(OrkestraConfiguration $configuration): void
@@ -67,6 +70,9 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
 
         // EVENT PROCESSING
         $this->configureEventProcessing($configuration);
+
+        // HTTP API
+        $this->configureHttpApi($configuration);
 
         $configuration->consoleCommand(DebugMessageClassMapConsoleCommand::class);
         // $configuration->consoleCommand(DebugMessageRouterConsoleCommand::class);
@@ -149,8 +155,6 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
         );
 
         $configuration->service(GitWrapper::class);
-
-        $this->configureApi($configuration);
     }
 
     protected function configureEventProcessing(OrkestraConfiguration $configuration): void
@@ -171,9 +175,8 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
         $configuration->service(MessageBusEventPublisher::class);
     }
 
-    private function configureApi(OrkestraConfiguration $configuration): void
+    private function configureHttpApi(OrkestraConfiguration $configuration): void
     {
-        $configuration->service(HttpLoggerListener::class);
         $configuration->service(ApiRequestListener::class);
         $configuration->service(ApiExceptionListener::class);
     }
