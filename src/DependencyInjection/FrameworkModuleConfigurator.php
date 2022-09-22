@@ -174,7 +174,7 @@ class FrameworkModuleConfigurator implements OrkestraModuleConfiguratorInterface
      * @param OrkestraConfiguration $configuration
      * @return void
      */
-    private function configureHttp(OrkestraConfiguration $configuration): void
+    protected function configureHttp(OrkestraConfiguration $configuration): void
     {
         $configuration->service(ApiRequestListener::class);
         $configuration->service(ApiExceptionListener::class);
